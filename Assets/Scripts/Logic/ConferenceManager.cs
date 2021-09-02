@@ -34,6 +34,7 @@ public class ConferenceManager : MonoBehaviour
     private void Start()
     {
         m_config = new ConnectionConfig();
+        m_config.LoadConfiguration();
 
         if(m_config.isHost)
         {

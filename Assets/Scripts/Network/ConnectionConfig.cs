@@ -18,6 +18,7 @@ public class ConnectionConfig
         set
         {
             m_ip = value;
+            Debug.Log("Address: " + m_ip.ToString());
         }
     }
 
@@ -31,6 +32,7 @@ public class ConnectionConfig
         set
         {
             m_port = value;
+            Debug.Log("Port: " + m_port.ToString());
         }
     }
 
@@ -44,6 +46,7 @@ public class ConnectionConfig
         set
         {
             m_isHost = value;
+            Debug.Log("Is host: " + m_isHost.ToString());
         }
     }
 
