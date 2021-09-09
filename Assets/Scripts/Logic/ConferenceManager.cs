@@ -35,10 +35,12 @@ public class ConferenceManager : MonoBehaviour
     {
         m_config = new ConnectionConfig();
         m_config.LoadConfiguration();
+        Messenger<GameObject>.AddListener(Event.LOCAL_USER_CREATED, OnLocalUserCreated);
 
         if(m_config.isHost)
         {
             m_arrangedView = new ArrangedView(m_width, m_height, m_camera);
+            Messenger.AddListener(Event.NEW_USER_REGISTERED, OnNewUserRegistered);
         }
 
         if (m_netManager != null)
@@ -60,24 +62,24 @@ public class ConferenceManager : MonoBehaviour
                 m_netManager.StartClient();
             }
             ObtainIndex();
-            SetUpUser();
         }
+    }
 
-        Messenger.AddListener(Event.NEW_USER_REGISTERED, OnNewUserRegistered);
+    private void OnLocalUserCreated(GameObject o)
+    {
+        m_localUser = o;
     }
 
     private Coroutine SetUpUser() => StartCoroutine(WaitForUser());
 
     private IEnumerator WaitForUser()
     {
-        while(!m_netManager.ConnectedClients.ContainsKey(m_netManager.LocalClientId) ||
-            m_netManager.ConnectedClients[m_netManager.LocalClientId].PlayerObject == null ||
-            m_netManager.ConnectedClients[m_netManager.LocalClientId].PlayerObject.gameObject == null)
+        while(m_localUser == null)
         {
             yield return new WaitForSecondsRealtime(0.05f);
         }
 
-        m_localUser = m_netManager.ConnectedClients[m_netManager.LocalClientId].PlayerObject.gameObject;
+        Debug.Log("Local user found.");
 
         if(m_mediaCommunicationManager != null)
         {
@@ -91,11 +93,13 @@ public class ConferenceManager : MonoBehaviour
 
     private IEnumerator WaitForIndex()
     {
-        while(!m_indexManager.isActiveAndEnabled)
+        while(!m_indexManager.IsOn)
         {
             yield return new WaitForSecondsRealtime(0.05f);
         }
         m_localUserIndex = m_indexManager.GetNextIndex();
+        Debug.Log("Obtained index: " + m_localUserIndex);
+        SetUpUser();
     }
 
     private void OnNewUserRegistered()
@@ -111,6 +115,7 @@ public class ConferenceManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        Messenger.RemoveListener(Event.NEW_USER_REGISTERED, OnNewUserRegistered);
+        if(m_config.isHost) Messenger.RemoveListener(Event.NEW_USER_REGISTERED, OnNewUserRegistered);
+        Messenger<GameObject>.RemoveListener(Event.LOCAL_USER_CREATED, OnLocalUserCreated);
     }
 }
