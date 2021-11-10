@@ -23,7 +23,7 @@ public class ChatManager : NetworkBehaviour
         _instance = this;
         display = GetComponent<ChatDisplay>();
         inputText.onEndEdit.AddListener(OnSendNewMessage);
-        myPlayerName = PlayerPrefs.GetString("Name");
+        myPlayerName = PlayerPrefs.GetString(UserPrefKey.USER_NAME);
     }
 
     private void OnSendNewMessage(string msg)
@@ -32,13 +32,11 @@ public class ChatManager : NetworkBehaviour
         if(IsServer)
         {
             Debug.Log("I'm server, running rpc.");
-            SendMessageClientRpc(pmsg,
-                GameObject.FindWithTag("LocalPlayer").GetComponent<NetworkObject>().NetworkObjectId);
+            SendMessageClientRpc(pmsg, NetworkManager.LocalClientId);
         } else
         {
             Debug.Log("I'm client, running command.");
-            SendMessageServerRpc(pmsg,
-                GameObject.FindWithTag("LocalPlayer").GetComponent<NetworkObject>().NetworkObjectId);
+            SendMessageServerRpc(pmsg, NetworkManager.LocalClientId);
         }
         inputText.text = "";
     }

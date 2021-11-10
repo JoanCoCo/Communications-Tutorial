@@ -13,7 +13,11 @@ public class MediaInputController : MonoBehaviour
     [SerializeField]
     private State state = State.Off;
 
+    [SerializeField]
+    private bool manageButtonText = true;
+
     private Button button;
+    private TextMeshProUGUI buttonText;
     private enum State { On, Off };
 
     [SerializeField]
@@ -23,6 +27,7 @@ public class MediaInputController : MonoBehaviour
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(ChangeState);
+        buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
         UpdateState();
     }
 
@@ -31,9 +36,17 @@ public class MediaInputController : MonoBehaviour
         if(state == State.On)
         {
             if(mediaInputManager != null) mediaInputManager.StartRecording();
+            if (manageButtonText && button != null && buttonText != null)
+            {
+                buttonText.text = "On";
+            }
         } else
         {
             if(mediaInputManager != null) mediaInputManager.StopRecording();
+            if (manageButtonText && button != null && buttonText != null)
+            {
+                buttonText.text = "Off";
+            }
         }
     }
 

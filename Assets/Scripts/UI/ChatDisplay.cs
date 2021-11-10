@@ -17,6 +17,8 @@ public class ChatDisplay : MonoBehaviour
 
     private InputAvailabilityManager inputAvailabilityManager;
 
+    private NetworkManager networkManager;
+
     private void Start()
     {
         UpdateDisplay();
@@ -43,7 +45,18 @@ public class ChatDisplay : MonoBehaviour
         GameObject omsg = Instantiate(messagePrefab, contentBox.transform);
         TextMeshProUGUI tmsg = omsg.GetComponent<TextMeshProUGUI>();
         tmsg.text = msg;
-        ulong myPlayerNetId = GameObject.FindWithTag("LocalPlayer").GetComponent<NetworkObject>().NetworkObjectId;
+        ulong myPlayerNetId = 0;
+        if(networkManager == null)
+        {
+            var o = GameObject.FindWithTag("NetworkManager");
+            if (o != null) {
+                networkManager = o.GetComponent<NetworkManager>();
+                if(networkManager != null) myPlayerNetId = networkManager.LocalClientId;
+            }
+        } else
+        {
+            myPlayerNetId = networkManager.LocalClientId;
+        }
         if (myPlayerNetId == id) tmsg.alignment = TextAlignmentOptions.MidlineRight;
         omsg.transform.SetAsLastSibling();
     }
