@@ -28,7 +28,7 @@ public class IndexManager : NetworkBehaviour
         m_isOn = true;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void UpdateIndexServerRpc()
     {
         m_index.Value += 1;
