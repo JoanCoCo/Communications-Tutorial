@@ -10,7 +10,7 @@ using MLAPI.Serialization.Pooled;
 
 
 /// <summary>
-/// Class that abstracts a streaming media manager,
+/// Class that abstracts a streaming media manager.
 /// </summary>
 public abstract class StreamManager : NetworkBehaviour, IMediaInputManager
 {

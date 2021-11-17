@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Auxiliar class that implements a grid view visualizer for debugging and
+/// developing purposes.
+/// </summary>
 public class ArrangedViewVisualizer : MonoBehaviour
 {
     [SerializeField] private int m_width;
