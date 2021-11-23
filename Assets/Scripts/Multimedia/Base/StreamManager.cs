@@ -620,9 +620,19 @@ public abstract class StreamManager : NetworkBehaviour, IMediaInputManager
     /// </summary>
     protected NetworkVariable<bool> isStreamOn = new NetworkVariable<bool>();
 
+    /// <summary>
+    /// Type of the messages comming from the server.
+    /// </summary>
     private const string SERVER_MSGTYPE = "Server";
+
+    /// <summary>
+    /// Type of the messages comming from the client.
+    /// </summary>
     private const string CLIENT_MSGTYPE = "Client";
 
+    /// <summary>
+    /// Is the stream on?
+    /// </summary>
     public bool IsOn
     {
         get
